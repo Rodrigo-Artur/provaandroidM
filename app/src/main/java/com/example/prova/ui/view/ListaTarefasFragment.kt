@@ -80,22 +80,40 @@ class ListaTarefasFragment : Fragment() {
         inputDesc.hint = "Descrição"
         layout.addView(inputDesc)
 
-        // Usa a primeira categoria como padrão para simplificar
-        val categoriaPadrao = categorias[0]
+        // --- NOVIDADE: Adicionar o Spinner (Dropdown) de Categorias ---
+        val labelCategoria = android.widget.TextView(context)
+        labelCategoria.text = "Selecione a Categoria:"
+        labelCategoria.setPadding(0, 30, 0, 10)
+        layout.addView(labelCategoria)
+
+        val spinnerCategoria = android.widget.Spinner(context)
+        // Extrai apenas os nomes das categorias para mostrar na lista
+        val nomesCategorias = categorias.map { it.nome }
+        val spinnerAdapter = android.widget.ArrayAdapter(
+            context, 
+            android.R.layout.simple_spinner_dropdown_item, 
+            nomesCategorias
+        )
+        spinnerCategoria.adapter = spinnerAdapter
+        layout.addView(spinnerCategoria)
+        // --------------------------------------------------------------
 
         AlertDialog.Builder(context)
             .setTitle("Nova Tarefa")
-            .setMessage("Categoria vinculada: ${categoriaPadrao.nome}")
             .setView(layout)
             .setPositiveButton("Salvar") { _, _ ->
                 val titulo = inputTitulo.text.toString()
                 val desc = inputDesc.text.toString()
+                
+                // Descobrir qual categoria foi selecionada no Spinner
+                val posicaoSelecionada = spinnerCategoria.selectedItemPosition
+                val categoriaSelecionada = categorias[posicaoSelecionada]
 
                 if (titulo.isNotEmpty()) {
                     val novaTarefa = Tarefa(
                         titulo = titulo,
                         descricao = desc,
-                        categoriaID = categoriaPadrao.id,
+                        categoriaID = categoriaSelecionada.id, // ID da categoria selecionada!
                         prioridade = "Média",
                         status = "Pendente",
                         limitDate = "Sem prazo",
@@ -108,10 +126,5 @@ class ListaTarefasFragment : Fragment() {
             }
             .setNegativeButton("Cancelar", null)
             .show()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
