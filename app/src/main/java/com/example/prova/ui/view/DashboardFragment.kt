@@ -13,8 +13,8 @@ class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
-    
-    // Compartilha o mesmo ViewModel com a Activity e outros Fragments
+
+    // Usamos o mesmo ViewModel para partilhar os dados com as outras janelas
     private val viewModel: TarefaViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -26,7 +26,27 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Aqui colocaremos a lógica dos gráficos e estatísticas depois
+
+        // Fica "à escuta" das mudanças na lista de tarefas para atualizar os cálculos
+        viewModel.allTarefas.observe(viewLifecycleOwner) { tarefas ->
+            val totalDeTarefas = tarefas.size
+            
+            // Conta quantas têm o status "Concluída" e "Pendente"
+            val concluidas = tarefas.count { it.status == "Concluída" }
+            val pendentes = tarefas.count { it.status == "Pendente" }
+
+            // Calcula a percentagem de produtividade (Regra de três simples)
+            val produtividade = if (totalDeTarefas > 0) {
+                (concluidas.toFloat() / totalDeTarefas.toFloat()) * 100
+            } else {
+                0f // Evita erro de divisão por zero se não houver tarefas
+            }
+
+            // Escreve os resultados no ecrã
+            binding.tvConcluidas.text = concluidas.toString()
+            binding.tvPendentes.text = pendentes.toString()
+            binding.tvProdutividade.text = String.format("%.1f%%", produtividade)
+        }
     }
 
     override fun onDestroyView() {
