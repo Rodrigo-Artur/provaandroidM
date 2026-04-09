@@ -1,6 +1,7 @@
 package com.example.prova.ui.adapter
 
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,14 +9,14 @@ import com.example.prova.data.entity.Categoria
 import com.example.prova.databinding.ItemCategoriaBinding
 
 class CategoriaAdapter(
-    private val onClick: (Categoria) -> Unit,       // NOVO: Toque simples para editar
-    private val onLongClick: (Categoria) -> Unit    // Toque longo para deletar
+    private val onClick: (Categoria) -> Unit,
+    private val onLongClick: (Categoria) -> Unit
 ) : RecyclerView.Adapter<CategoriaAdapter.CategoriaViewHolder>() {
 
     private var categorias = emptyList<Categoria>()
 
-    fun setCategorias(categorias: List<Categoria>) {
-        this.categorias = categorias
+    fun setCategorias(newCategorias: List<Categoria>) {
+        this.categorias = newCategorias
         notifyDataSetChanged()
     }
 
@@ -34,13 +35,19 @@ class CategoriaAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(categoria: Categoria) {
             binding.tvNomeCategoria.text = categoria.nome
+            
             try {
-                binding.viewColor.setBackgroundColor(Color.parseColor(categoria.colorHex))
+                val circle = GradientDrawable()
+                circle.shape = GradientDrawable.OVAL
+                circle.setColor(Color.parseColor(categoria.colorHex))
+                binding.viewColor.background = circle
             } catch (e: Exception) {
-                binding.viewColor.setBackgroundColor(Color.GRAY)
+                val circle = GradientDrawable()
+                circle.shape = GradientDrawable.OVAL
+                circle.setColor(Color.LTGRAY)
+                binding.viewColor.background = circle
             }
 
-            // Configuração dos Toques
             binding.root.setOnClickListener { onClick(categoria) }
             binding.root.setOnLongClickListener {
                 onLongClick(categoria)
