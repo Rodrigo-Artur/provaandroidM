@@ -15,24 +15,40 @@ class CategoriaAdapter(
 
     private var categorias = emptyList<Categoria>()
 
+    /**
+     * Atualiza a lista de categorias do adapter e notifica a mudança para atualizar a tela.
+     */
     fun setCategorias(newCategorias: List<Categoria>) {
         this.categorias = newCategorias
         notifyDataSetChanged()
     }
 
+    /**
+     * Cria uma nova view inflando o layout do item da categoria para a lista.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoriaViewHolder {
         val binding = ItemCategoriaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CategoriaViewHolder(binding)
     }
 
+    /**
+     * Preenche os dados da categoria no ViewHolder de acordo com a sua posição na lista.
+     */
     override fun onBindViewHolder(holder: CategoriaViewHolder, position: Int) {
         holder.bind(categorias[position])
     }
 
+    /**
+     * Retorna o número total de itens na lista de categorias.
+     */
     override fun getItemCount(): Int = categorias.size
 
     inner class CategoriaViewHolder(private val binding: ItemCategoriaBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        
+        /**
+         * Adiciona os dados de nome e cor à view da categoria, além dos eventos de click.
+         */
         fun bind(categoria: Categoria) {
             binding.tvNomeCategoria.text = categoria.nome
             
