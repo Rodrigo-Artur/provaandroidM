@@ -11,7 +11,7 @@ import com.example.prova.data.entity.Categoria
 
 @Dao
 interface CategoriaDao {
-    @Query("SELECT * FROM tabela_categoria ORDER BY nome ASC")
+    @Query("SELECT * FROM tabela_categorias ORDER BY nome ASC")
     fun getAllCategorias(): LiveData<List<Categoria>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

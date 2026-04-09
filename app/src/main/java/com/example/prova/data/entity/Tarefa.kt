@@ -2,6 +2,7 @@ package com.example.prova.data.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -13,7 +14,8 @@ import androidx.room.PrimaryKey
             childColumns = ["categoriaID"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index(value = ["categoriaID"])] // Resolve o aviso de performance
 )
 data class Tarefa(
     @PrimaryKey(autoGenerate = true)
@@ -21,9 +23,9 @@ data class Tarefa(
     val titulo: String,
     val descricao: String,
     val categoriaID: Long,
-    val prioridade: String,       // "Baixa", "Média", "Alta"
-    val status: String,           // "Pendente", "Concluída"
-    val limitDate: String,        // "dd/MM/yyyy" ou "Sem prazo"
-    val isDaily: Boolean = false, // Tarefa diária
+    val prioridade: String,
+    val status: String,
+    val limitDate: String,
+    val isDaily: Boolean = false,
     val createdAt: Long
 )

@@ -9,7 +9,6 @@ import com.example.prova.data.entity.Tarefa
 import com.example.prova.data.dao.CategoriaDao
 import com.example.prova.data.dao.TarefaDao
 
-// MUDAMOS A VERSÃO PARA 2
 @Database(entities = [Tarefa::class, Categoria::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun tarefaDao(): TarefaDao
