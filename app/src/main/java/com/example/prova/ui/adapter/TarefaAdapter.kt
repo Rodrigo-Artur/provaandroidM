@@ -7,7 +7,8 @@ import com.example.prova.data.entity.Tarefa
 import com.example.prova.databinding.ItemTarefaBinding
 
 class TarefaAdapter(
-    private val onLongClick: (Tarefa) -> Unit // Ação para deletar ou concluir
+    private val onClick: (Tarefa) -> Unit,       // NOVO: Toque simples para editar
+    private val onLongClick: (Tarefa) -> Unit    // Toque longo para concluir
 ) : RecyclerView.Adapter<TarefaAdapter.TarefaViewHolder>() {
 
     private var tarefas = emptyList<Tarefa>()
@@ -35,13 +36,14 @@ class TarefaAdapter(
             binding.tvDescricaoTarefa.text = tarefa.descricao
             binding.tvStatusTarefa.text = tarefa.status
 
-            // Muda a cor do texto dependendo se está concluída ou pendente
             if (tarefa.status == "Concluída") {
-                binding.tvStatusTarefa.setTextColor(android.graphics.Color.parseColor("#4CAF50")) // Verde
+                binding.tvStatusTarefa.setTextColor(android.graphics.Color.parseColor("#4CAF50"))
             } else {
-                binding.tvStatusTarefa.setTextColor(android.graphics.Color.parseColor("#FF9800")) // Laranja
+                binding.tvStatusTarefa.setTextColor(android.graphics.Color.parseColor("#FF9800"))
             }
 
+            // Configuração dos Toques
+            binding.root.setOnClickListener { onClick(tarefa) }
             binding.root.setOnLongClickListener {
                 onLongClick(tarefa)
                 true

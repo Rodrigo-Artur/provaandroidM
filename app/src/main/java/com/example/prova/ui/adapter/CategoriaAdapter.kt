@@ -8,14 +8,15 @@ import com.example.prova.data.entity.Categoria
 import com.example.prova.databinding.ItemCategoriaBinding
 
 class CategoriaAdapter(
-    private val onLongClick: (Categoria) -> Unit // Ação para deletar ao segurar
+    private val onClick: (Categoria) -> Unit,       // NOVO: Toque simples para editar
+    private val onLongClick: (Categoria) -> Unit    // Toque longo para deletar
 ) : RecyclerView.Adapter<CategoriaAdapter.CategoriaViewHolder>() {
 
     private var categorias = emptyList<Categoria>()
 
     fun setCategorias(categorias: List<Categoria>) {
         this.categorias = categorias
-        notifyDataSetChanged() // Avisa a tela que os dados mudaram
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoriaViewHolder {
@@ -24,8 +25,7 @@ class CategoriaAdapter(
     }
 
     override fun onBindViewHolder(holder: CategoriaViewHolder, position: Int) {
-        val current = categorias[position]
-        holder.bind(current)
+        holder.bind(categorias[position])
     }
 
     override fun getItemCount(): Int = categorias.size
@@ -35,13 +35,13 @@ class CategoriaAdapter(
         fun bind(categoria: Categoria) {
             binding.tvNomeCategoria.text = categoria.nome
             try {
-                // Tenta aplicar a cor Hexadecimal digitada
                 binding.viewColor.setBackgroundColor(Color.parseColor(categoria.colorHex))
             } catch (e: Exception) {
-                binding.viewColor.setBackgroundColor(Color.GRAY) // Cor padrão caso digitem errado
+                binding.viewColor.setBackgroundColor(Color.GRAY)
             }
 
-            // Ao segurar o dedo no item, aciona a função de deletar
+            // Configuração dos Toques
+            binding.root.setOnClickListener { onClick(categoria) }
             binding.root.setOnLongClickListener {
                 onLongClick(categoria)
                 true
