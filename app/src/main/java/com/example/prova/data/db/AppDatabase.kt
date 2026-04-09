@@ -9,7 +9,8 @@ import com.example.prova.data.entity.Tarefa
 import com.example.prova.data.dao.CategoriaDao
 import com.example.prova.data.dao.TarefaDao
 
-@Database(entities = [Tarefa::class, Categoria::class], version = 1, exportSchema = false)
+// MUDAMOS A VERSÃO PARA 2
+@Database(entities = [Tarefa::class, Categoria::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun tarefaDao(): TarefaDao
     abstract fun categoriaDao(): CategoriaDao
@@ -24,7 +25,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "taskflow_database"
-                ).build()
+                )
+                .fallbackToDestructiveMigration() // NOVO: Recria o banco para aceitar a nova coluna "isDaily" sem crashar
+                .build()
                 INSTANCE = instance
                 instance
             }

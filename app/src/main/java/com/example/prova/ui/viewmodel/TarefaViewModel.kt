@@ -56,6 +56,10 @@ class TarefaViewModel(application: Application) : AndroidViewModel(application) 
         categoriaRepository.insert(categoria)
     }
 
+    fun updateCategoria(categoria: Categoria) = viewModelScope.launch(Dispatchers.IO) {
+        categoriaRepository.update(categoria)
+    }
+
     fun deleteCategoria(categoria: Categoria) = viewModelScope.launch(Dispatchers.IO) {
         categoriaRepository.delete(categoria)
     }
